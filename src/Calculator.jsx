@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { useState } from "react";
+import styled from "styled-components";
 
 const CalculatorContainer = styled.div`
   width: 90%;
@@ -14,15 +14,17 @@ const CalculatorContainer = styled.div`
     height: 394px;
   }
 `;
-const FormulaScreen = styled.div`
+const FormulaScreen = styled.pre`
   width: 100%;
   text-align: right;
-  vertical-align: text-top;
   line-height: 20px;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  font-family: "Roboto Mono", monospace;
+  vertical-align: middle;
+  font-family: "Calculator", sans-serif;
   font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 3px;
   color: orange;
   grid-column: 1 / 5;
   grid-row: 1 / 2;
@@ -70,13 +72,17 @@ const Calculator = () => {
     setOutput(input);
     setFormula((prev) => prev + input);
   };
+  const handleMultiply = () => {
+    setOutput("*");
+    setFormula((prev) => prev + "*");
+  };
   const handleClear = () => {
     setOutput(0);
     setFormula("");
   };
   const calculate = () => {
-    console.log(typeof formula.replace('"', ""));
-    setOutput(formula.replace('"', ""));
+    setFormula(formula + "=" + eval(formula));
+    setOutput(eval(formula));
   };
 
   return (
@@ -89,7 +95,7 @@ const Calculator = () => {
       <OPButton id="divide" onClick={handleClick}>
         /
       </OPButton>
-      <OPButton id="multiply" onClick={handleClick}>
+      <OPButton id="multiply" onClick={handleMultiply}>
         x
       </OPButton>
       <NumberButton id="seven" onClick={handleClick}>

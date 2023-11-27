@@ -64,7 +64,11 @@ Users should be able to:
 
 ### Helpful Resources
 
-- [vertical-align: text-top](https://developer.mozilla.org/en-US/docs/Web/CSS/vertical-align)
+- [vertical-align](https://developer.mozilla.org/en-US/docs/Web/CSS/vertical-align)
+- [@font-face](https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face)
+- [CDN Fonts](https://www.cdnfonts.com/)
+- [Using Font Files in React](https://darshnarekha09.medium.com/adding-local-fonts-in-react-9d1466952042)
+- [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)
 
 ## Author
 
