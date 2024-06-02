@@ -1,7 +1,7 @@
-import "./App.css";
 import { useEffect } from "react";
-import Calculator from "./Calculator";
 import styled from "styled-components";
+import Calculator from "./Calculator";
+import "./App.css";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -11,16 +11,19 @@ const AppContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 function App() {
   const setAppHeight = () => {
     const doc = document.documentElement;
     doc.style.setProperty("--app-height", `${window.innerHeight}px`);
   };
+
   useEffect(() => {
     window.addEventListener("resize", setAppHeight);
     setAppHeight();
     return () => window.removeEventListener("resize", setAppHeight);
   }, []);
+
   return (
     <main>
       <AppContainer>
