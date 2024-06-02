@@ -11,7 +11,6 @@ This is a solution to the [Build a Javascript Calculator challenge](https://www.
 - [My process](#my-process)
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
-  - [Continued development](#continued-development)
   - [Useful resources](#useful-resources)
 - [Author](#author)
 
@@ -26,11 +25,6 @@ Users should be able to:
 ### Screenshot
 
 <table>
-  <tr>
-    <td>
-      <img src="./public/screenshots/screenshot-mobile-default.png" alt="screenshot mobile default" style="width: 300px" />
-    </td>
-  </tr>
   <tr>
     <td>
       <img src="./public/screenshots/screenshot-desktop-default.png" alt="screenshot desktop default" style="width: 300px" />
@@ -56,11 +50,8 @@ Users should be able to:
 
 ### What I learned
 
--
+- [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)
 
-### Continued development
-
--
 
 ### Helpful Resources
 
