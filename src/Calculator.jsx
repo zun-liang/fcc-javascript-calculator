@@ -14,13 +14,12 @@ const CalculatorContainer = styled.div`
     height: 394px;
   }
 `;
-const FormulaScreen = styled.pre`
+const FormulaScreen = styled.p`
   width: 100%;
   text-align: right;
   line-height: 20px;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  vertical-align: middle;
   font-family: "Calculator", sans-serif;
   font-size: 20px;
   font-weight: bold;
@@ -67,22 +66,142 @@ const EqualButton = styled(NumberButton)`
 const Calculator = () => {
   const [formula, setFormula] = useState("");
   const [output, setOutput] = useState(0);
-  const handleClick = (e) => {
+  const [preOutput, setPreOutput] = useState(null);
+  const preInputRegex = /[+×/-]/g;
+  const lastInput = formula[formula.length - 1];
+
+  const handleNumber = (e) => {
     const input = e.target.innerText;
-    setOutput(input);
-    setFormula((prev) => prev + input);
+    if (preOutput === "NaN") {
+      const updatedInput = preOutput + input;
+      setOutput(updatedInput);
+      setFormula(updatedInput);
+      setPreOutput(null);
+    } else if (preInputRegex.test(lastInput)) {
+      setOutput(input);
+      setFormula((prev) => prev + input);
+    } else if (preOutput) {
+      setOutput(input);
+      setFormula(input);
+    } else if (output === 0 || lastInput === "0") {
+      setOutput(input);
+      setFormula(input);
+    } else {
+      setOutput((prev) => prev + input);
+      setFormula((prev) => prev + input);
+    }
   };
+
+  const handleDecimal = () => {
+    if (preOutput === "NaN" || preOutput) {
+      setOutput("0.");
+      setFormula("0.");
+      setPreOutput(null);
+    } else if (
+      formula === "" ||
+      preInputRegex.test(lastInput) ||
+      lastInput === "="
+    ) {
+      setOutput("0.");
+      setFormula((prev) => prev + "0.");
+    } else if (lastInput === ".") {
+      setOutput(formula);
+    } else if (output.indexOf(".") > 0) {
+      setOutput((prev) => prev);
+      setFormula((prev) => prev);
+    } else {
+      const updatedInput = formula + ".";
+      setOutput(updatedInput);
+      setFormula(updatedInput);
+    }
+  };
+
+  const handleOperator = (e) => {
+    const input = e.target.innerText;
+    const regex = /[+×/-]{1,}/g;
+    if (preOutput || preOutput === "NaN") {
+      setOutput(input);
+      setFormula(preOutput + input);
+      setPreOutput(null);
+    } else if (lastInput === ".") {
+      setOutput(input);
+      setFormula("0" + input);
+    } else if (preInputRegex.test(lastInput)) {
+      setOutput(input);
+      setFormula((prev) => {
+        const updatedFormula = prev + input;
+        const correctedFormula = updatedFormula.replace(regex, (match) =>
+          match.charAt(match.length - 1)
+        );
+        return correctedFormula;
+      });
+    } else {
+      setOutput(input);
+      setFormula((prev) => prev + input);
+    }
+  };
+
   const handleMultiply = () => {
-    setOutput("*");
-    setFormula((prev) => prev + "*");
+    const regex = /×{2,}|[+/-]/g;
+    if (preOutput || preOutput === "NaN") {
+      const updatedInput = preOutput + "×";
+      setOutput("×");
+      setFormula(updatedInput);
+    } else if (lastInput === "." || formula === "") {
+      setOutput("×");
+      setFormula("0×");
+    } else {
+      setOutput("×");
+      setFormula((prev) => {
+        const updatedFormula = prev + "×";
+        const correctedFormula = updatedFormula.replace(regex, (match) =>
+          match.charAt(match.length - 1)
+        );
+        return correctedFormula;
+      });
+    }
   };
+
+  const handleSubtract = () => {
+    const regex = /-{2,}/g;
+    if (lastInput === ".") {
+      setOutput("-");
+      setFormula("0-");
+    } else if (regex.test(formula)) {
+      setOutput("-");
+      setFormula((prev) => prev);
+    } else {
+      setOutput("-");
+      setFormula((prev) => prev + "-");
+    }
+  };
+
   const handleClear = () => {
     setOutput(0);
     setFormula("");
+    setPreOutput(null);
   };
+
   const calculate = () => {
-    setFormula(formula + "=" + eval(formula));
-    setOutput(eval(formula));
+    const regex = /-{2,}/g;
+    if (formula === "") {
+      setFormula("=NaN");
+      setOutput("NaN");
+      setPreOutput("NaN");
+    } else if (regex.test(formula)) {
+      const updatedFormula = formula.replace(regex, (match) =>
+        match.charAt(match.length - 1)
+      );
+      setFormula(
+        updatedFormula + "=" + eval?.(updatedFormula.replace("×", "*"))
+      );
+      setOutput(eval?.(updatedFormula.replace("×", "*")));
+      setPreOutput(eval?.(updatedFormula.replace("×", "*")));
+    } else {
+      setFormula(formula + "=" + eval?.(formula.replace("×", "*")));
+      setOutput(eval?.(formula.replace("×", "*")));
+      setPreOutput(eval?.(formula.replace("×", "*")));
+    }
   };
 
   return (
@@ -92,52 +211,52 @@ const Calculator = () => {
       <ACButton id="clear" onClick={handleClear}>
         AC
       </ACButton>
-      <OPButton id="divide" onClick={handleClick}>
+      <OPButton id="divide" onClick={handleOperator}>
         /
       </OPButton>
       <OPButton id="multiply" onClick={handleMultiply}>
         x
       </OPButton>
-      <NumberButton id="seven" onClick={handleClick}>
+      <NumberButton id="seven" onClick={handleNumber}>
         7
       </NumberButton>
-      <NumberButton id="eight" onClick={handleClick}>
+      <NumberButton id="eight" onClick={handleNumber}>
         8
       </NumberButton>
-      <NumberButton id="nine" onClick={handleClick}>
+      <NumberButton id="nine" onClick={handleNumber}>
         9
       </NumberButton>
-      <OPButton id="subtract" onClick={handleClick}>
+      <OPButton id="subtract" onClick={handleSubtract}>
         -
       </OPButton>
-      <NumberButton id="four" onClick={handleClick}>
+      <NumberButton id="four" onClick={handleNumber}>
         4
       </NumberButton>
-      <NumberButton id="five" onClick={handleClick}>
+      <NumberButton id="five" onClick={handleNumber}>
         5
       </NumberButton>
-      <NumberButton id="six" onClick={handleClick}>
+      <NumberButton id="six" onClick={handleNumber}>
         6
       </NumberButton>
-      <OPButton id="add" onClick={handleClick}>
+      <OPButton id="add" onClick={handleOperator}>
         +
       </OPButton>
-      <NumberButton id="one" onClick={handleClick}>
+      <NumberButton id="one" onClick={handleNumber}>
         1
       </NumberButton>
-      <NumberButton id="two" onClick={handleClick}>
+      <NumberButton id="two" onClick={handleNumber}>
         2
       </NumberButton>
-      <NumberButton id="three" onClick={handleClick}>
+      <NumberButton id="three" onClick={handleNumber}>
         3
       </NumberButton>
       <EqualButton id="equals" onClick={calculate}>
         =
       </EqualButton>
-      <ZeroButton id="zero" onClick={handleClick}>
+      <ZeroButton id="zero" onClick={handleNumber}>
         0
       </ZeroButton>
-      <NumberButton id="decimal" onClick={handleClick}>
+      <NumberButton id="decimal" onClick={handleDecimal}>
         .
       </NumberButton>
     </CalculatorContainer>
