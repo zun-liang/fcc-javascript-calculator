@@ -21,6 +21,7 @@ This is a solution to the [Build a Javascript Calculator challenge](https://www.
 Users should be able to:
 
 - View the optimal layout for the site depending on their device's screen size
+- Perform addition, subtraction, multiplication, and division
 
 ### Screenshot
 
@@ -51,7 +52,6 @@ Users should be able to:
 ### What I learned
 
 - [eval()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval)
-
 
 ### Helpful Resources
 
