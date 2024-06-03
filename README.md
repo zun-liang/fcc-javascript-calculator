@@ -1,4 +1,4 @@
-# freeCodeCamp - Build a Drum Machine
+# freeCodeCamp - Build a Javascript Calculator
 
 This is a solution to the [Build a Javascript Calculator challenge](https://www.freecodecamp.org/learn/front-end-development-libraries/front-end-development-libraries-projects/build-a-javascript-calculator) on freeCodeCamp.
 
